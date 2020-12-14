@@ -5,7 +5,7 @@ import (
 	"flag"
 	"os"
 
-	engine "github.com/burbokop/simple_interpreter/src"
+	engine "github.com/burbokop/simple_interpreter/src/engine"
 )
 
 func main() {
