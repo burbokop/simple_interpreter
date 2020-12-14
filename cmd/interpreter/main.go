@@ -3,11 +3,20 @@ package main
 import (
 	"bufio"
 	"flag"
+	"fmt"
 	"os"
 	"reflect"
 
 	engine "github.com/burbokop/simple_interpreter/src/engine"
 )
+
+type TestCommand struct {
+	arg string
+}
+
+func (p *TestCommand) Execute(loop engine.Handler) {
+	fmt.Println(p.arg)
+}
 
 func main() {
 	var inputPath = flag.String("i", "", "Input file path")
@@ -16,7 +25,7 @@ func main() {
 	}
 
 	var parser = new(engine.Parser)
-	parser.AddCmdType(reflect.TypeOf(printCommand))
+	parser.AddCmdType("test", reflect.TypeOf((*TestCommand)(nil)))
 
 	eventLoop := new(engine.EventLoop)
 	eventLoop.Start()
@@ -25,7 +34,7 @@ func main() {
 		scanner := bufio.NewScanner(input)
 		for scanner.Scan() {
 			commandLine := scanner.Text()
-			cmd := engine.Parse(commandLine) // parse the line to get an instance of Command
+			cmd := parser.Parse(commandLine) // parse the line to get an instance of Command
 			eventLoop.Post(cmd)
 		}
 	}

@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+
 	engine "github.com/burbokop/simple_interpreter/src/engine"
 )
 
-type printCommand struct {
+type PrintCommand struct {
 	arg string
 }
 
-func (p *printCommand) Execute(loop engine.Handler) {
+func (p *PrintCommand) Execute(loop engine.Handler) {
 	fmt.Println(p.arg)
 }
