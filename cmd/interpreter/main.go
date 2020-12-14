@@ -14,6 +14,9 @@ func main() {
 		return
 	}
 
+	var parser = new(engine.Parser)
+	parser.AddCmdType(printCommand)
+
 	eventLoop := new(engine.EventLoop)
 	eventLoop.Start()
 	if input, err := os.Open(*inputPath); err == nil {

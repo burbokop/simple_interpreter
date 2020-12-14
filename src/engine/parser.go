@@ -1,19 +1,25 @@
 package engine
 
-import "strings"
+import (
+	"reflect"
+	"strings"
+)
 
 type Parser struct {
 	Cmds map[string]interface{}
 }
 
-func (parser *Parser) AddCmdType(name string, f interface{}) {
+func (parser *Parser) AddCmdType(name string, f reflect.Type) {
 	parser.Cmds[name] = f
 }
 
 func (parser *Parser) Parse(str string) Command {
 	var s = strings.Fields(str)
 	if len(s) > 0 {
-		parser.Cmds[s[0]]
-		//var obj = new()
+		var t, found = parser.Cmds[s[0]]
+		if found {
+			var obj = reflect.ValueOf(t)
+			return obj
+		}
 	}
 }
