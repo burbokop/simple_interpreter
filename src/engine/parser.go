@@ -6,11 +6,12 @@ import (
 )
 
 type Parser struct {
-	Cmds map[string]interface{}
+	Cmds map[string]reflect.Type
 }
 
-func (parser *Parser) AddCmdType(name string, f reflect.Type) {
-	parser.Cmds[name] = f
+func (parser *Parser) AddCmdType(name string, f int) {
+	f.
+		parser.Cmds[name] = f
 }
 
 func (parser *Parser) Parse(str string) Command {
@@ -18,8 +19,9 @@ func (parser *Parser) Parse(str string) Command {
 	if len(s) > 0 {
 		var t, found = parser.Cmds[s[0]]
 		if found {
-			var obj = reflect.ValueOf(t)
-			return obj
+			var _ = reflect.ValueOf(t)
+			//			return obj.C
 		}
 	}
+	return nil
 }
