@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"flag"
 	"os"
+	"reflect"
 
 	engine "github.com/burbokop/simple_interpreter/src/engine"
 )
@@ -15,7 +16,7 @@ func main() {
 	}
 
 	var parser = new(engine.Parser)
-	parser.AddCmdType(printCommand)
+	parser.AddCmdType(reflect.TypeOf(printCommand))
 
 	eventLoop := new(engine.EventLoop)
 	eventLoop.Start()
