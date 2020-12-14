@@ -2,19 +2,26 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"os"
-	"github.com/burbokop/simple_interpreter/src"
+
+	engine "github.com/burbokop/simple_interpreter/src"
 )
 
 func main() {
+	var inputPath = flag.String("i", "", "Input file path")
+	if len(*inputPath) == 0 {
+		return
+	}
+
 	eventLoop := new(engine.EventLoop)
 	eventLoop.Start()
-	if input, err := os.Open(inputFile); err == nil {
+	if input, err := os.Open(*inputPath); err == nil {
 		defer input.Close()
 		scanner := bufio.NewScanner(input)
 		for scanner.Scan() {
 			commandLine := scanner.Text()
-			cmd := parse(commandLine) // parse the line to get an instance of Command
+			cmd := engine.Parse(commandLine) // parse the line to get an instance of Command
 			eventLoop.Post(cmd)
 		}
 	}
