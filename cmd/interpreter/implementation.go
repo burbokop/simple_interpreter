@@ -21,12 +21,18 @@ func (p *PrintCommand) Execute(loop engine.Handler) {
 }
 
 type ReverseCommand struct {
-	arg string
+	arg   string
+	async bool
 }
 
 func (p *ReverseCommand) Init(args []string) {
 	if len(args) > 1 {
 		p.arg = args[1]
+		if len(args) > 2 {
+			if args[2] == "async" {
+				p.async = true
+			}
+		}
 	}
 }
 
@@ -38,5 +44,9 @@ func (p *ReverseCommand) Execute(loop engine.Handler) {
 		}
 		return string(rns)
 	}
-	fmt.Println(reverce(p.arg))
+	if p.async {
+		loop.Post(&PrintCommand{arg: reverce(p.arg)})
+	} else {
+		fmt.Println(reverce(p.arg))
+	}
 }

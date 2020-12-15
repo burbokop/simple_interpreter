@@ -1,4 +1,8 @@
 print message1
 print message2
 reverse message3
-reverse message4
+reverse message4 async
+reverse message5
+print message6
+print message7
+print message8
