@@ -3,6 +3,7 @@ package engine
 import (
 	"reflect"
 	"sync"
+	"sync/atomic"
 
 	"github.com/enriquebris/goconcurrentqueue"
 )
@@ -22,9 +23,11 @@ type EventLoop struct {
 	Queue        *goconcurrentqueue.FIFO
 	Active       bool
 	ExecFinished sync.WaitGroup
+	ExecAlive    int32
 }
 
 func (el *EventLoop) Exec() {
+	defer atomic.StoreInt32(&el.ExecAlive, 0)
 	defer el.ExecFinished.Done()
 	if el.Queue == nil {
 		return
@@ -39,8 +42,10 @@ func (el *EventLoop) Exec() {
 
 func (el *EventLoop) Start() {
 	el.Active = true
-	el.ExecFinished.Add(1)
-	go el.Exec()
+	if atomic.CompareAndSwapInt32(&el.ExecAlive, 0, 1) {
+		el.ExecFinished.Add(1)
+		go el.Exec()
+	}
 }
 
 func (el *EventLoop) Post(cmd Command) {
@@ -48,7 +53,7 @@ func (el *EventLoop) Post(cmd Command) {
 		el.Queue = goconcurrentqueue.NewFIFO()
 	}
 	el.Queue.Enqueue(cmd)
-	if el.Active {
+	if el.Active && atomic.CompareAndSwapInt32(&el.ExecAlive, 0, 1) {
 		el.ExecFinished.Add(1)
 		go el.Exec()
 	}
