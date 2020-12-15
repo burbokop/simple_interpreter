@@ -21,6 +21,7 @@ func main() {
 	var parser = new(engine.Parser)
 	parser.AddCmdType("print", reflect.TypeOf(PrintCommand{}))
 	parser.AddCmdType("reverse", reflect.TypeOf(ReverseCommand{}))
+	parser.AddCmdType("split", reflect.TypeOf(SplitCommand{}))
 
 	eventLoop := new(engine.EventLoop)
 	eventLoop.Start()
