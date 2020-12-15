@@ -4,4 +4,4 @@
 
 # running
 
-`go run ./cmd/interpreter/ -i ./examples/example0` in root folder of project
+in root folder of project: `go run ./cmd/interpreter/ -i ./examples/example0`
